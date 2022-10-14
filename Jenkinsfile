@@ -4,6 +4,15 @@ node() {
     currentBuild.result = "SUCCESS"
 
     try {
+       
+        stage('Update Manifests'){
+         
+          echo 'Update the Kubernetes Manifest Versions'
+          git branch: 'main', url: 'https://github.com/iam-veeramalla/cicd-end-to-end'
+          sh 'sh "cd \$(basename cicd-end-to-end)"'
+          sh 'cat deploy.yaml | yq '.spec.containers[0].image = "abhishekf5/todo-app:v2"''
+          sh 'git add . && git commit -m "update tag" && git push'
+       }
 
        stage('Checkout'){
 
@@ -22,15 +31,6 @@ node() {
          echo 'Push to Repo'
          sh 'docker push abhishekf5/cicd-e2e:v2'
        }
-        
-        stage('Update Manifests'){
-         
-          echo 'Update the Kubernetes Manifest Versions'
-          git branch: 'main', url: 'https://github.com/iam-veeramalla/cicd-end-to-end'
-          sh 'sh "cd \$(basename cicd-end-to-end)'
-          sh 'cat deploy.yaml | yq '.spec.containers[0].image = "abhishekf5/todo-app:v2"''
-          sh 'git add . && git commit -m "update tag" && git push'
-        }
 
        stage('Notification'){
 
