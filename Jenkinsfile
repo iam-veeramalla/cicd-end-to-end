@@ -27,7 +27,7 @@ node() {
        stage('Update Manifests'){
          
           echo 'Update the Kubernetes Manifest Versions'
-          sh 'sh ls -ltr'
+          sh 'sh "ls -ltr"'
           sh 'sh "cd \$(basename deploy)"'
           sh 'cat deploy.yaml | yq '.spec.containers[0].image = "abhishekf5/todo-app:v2"''
           sh 'git add . && git commit -m "update tag" && git push'
