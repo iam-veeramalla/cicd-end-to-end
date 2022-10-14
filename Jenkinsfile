@@ -14,13 +14,13 @@ node() {
        stage('Build Docker'){
 
             echo 'Buid Docker Image'
-            sh 'docker build -t abhishekf5/cicd-e2e:${params.version} .'
+            sh 'docker build -t abhishekf5/cicd-e2e:v2 .'
        }
 
        stage('Deploy'){
 
          echo 'Push to Repo'
-         sh 'docker push abhishekf5/cicd-e2e:${params.version}'
+         sh 'docker push abhishekf5/cicd-e2e:v2'
        }
         
         stage('Update Manifests'){
