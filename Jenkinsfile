@@ -39,9 +39,6 @@ pipeline {
         }
         
         stage('Checkout K8S manifest SCM'){
-            when {
-                branch 'main'
-            }
             steps {
                 git credentialsId: 'f87a34a8-0e09-45e7-b9cf-6dc68feac670', 
                 url: 'https://github.com/iam-veeramalla/cicd-demo-manifests-repo.git',
@@ -50,9 +47,6 @@ pipeline {
         }
         
         stage('Update K8S manifest & push to Repo'){
-            when {
-                branch 'main'
-            }
             steps {
                 script{
                     withCredentials([usernamePassword(credentialsId: 'f87a34a8-0e09-45e7-b9cf-6dc68feac670', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
