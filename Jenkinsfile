@@ -23,7 +23,7 @@ pipeline {
                 script{
                     sh '''
                     echo 'Buid Docker Image'
-                    sh 'docker build -t abhishekf5/cicd-e2e:v2 .'
+                    sh 'docker build -t abhishekf5/cicd-e2e:${BUILD_NUMBER} .'
                     '''
                 }
             }
@@ -34,7 +34,7 @@ pipeline {
                 script{
                     sh '''
                     echo 'Push to Repo'
-                     sh 'docker push abhishekf5/cicd-e2e:v2'
+                     sh 'docker push abhishekf5/cicd-e2e:${BUILD_NUMBER}'
                     '''
                 }
             }
@@ -45,30 +45,26 @@ pipeline {
                 branch 'main'
             }
             steps {
-                git credentialsId: '', 
-                url: 'https://github.com/shobhans/argocd_app_k8s_manifests.git',
+                git credentialsId: 'f87a34a8-0e09-45e7-b9cf-6dc68feac670', 
+                url: 'https://github.com/iam-veeramalla/cicd-demo-manifests-repo.git',
                 branch: 'main'
             }
         }
         
-        stage('Staging Deploy - Update K8S manifest & push to Repo'){
+        stage('Update K8S manifest & push to Repo'){
             when {
                 branch 'main'
             }
             steps {
-                milestone(1)
                 script{
-                    withCredentials([usernamePassword(credentialsId: '', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    withCredentials([usernamePassword(credentialsId: 'f87a34a8-0e09-45e7-b9cf-6dc68feac670', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh '''
-                        cd staging
                         cat deployment.yaml
-                        sed -i "s/${APP_NAME}.*/${APP_NAME}:${BUILD_NUMBER}/g" deployment.yaml
+                        sed -i "s/v1/${BUILD_NUMBER}/g" deployment.yaml
                         cat deployment.yaml
-                        git config --global user.name "shobhan"
-                        git config --global user.email "post.shobhan@gmail.com"
                         git add deployment.yaml
                         git commit -m 'Updated the Staging App deployment | Jenkins Pipeline'
-                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/argocd_app_k8s_manifests.git HEAD:main
+                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/cicd-demo-manifests-repo.git HEAD:main
                         '''                        
                     }
                 }
