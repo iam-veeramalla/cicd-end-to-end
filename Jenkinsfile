@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = "docker-djngo:v${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git credentialsId: '',
+                url: 'https://github.com/livevil8/cicd-end-to-end',
+                branch: 'main'
+            }
+        }
+        stage('Build Docker') {
+            steps {
+                script {
+                    sh '''
+                    echo 'Building Docker Image'
+                    docker build -t livevil8/${DOCKER_IMAGE} .
+                    '''
+                }
+            }
+        }
+        stage ('Deploy Locally') {
+            steps {
+                script {
+                    sh "docker compose up -d"
+                }
+            }
+        }
+        stage ('Cleanup Locally') {
+            steps {
+                script {
+                    sh "docker compose down"
+                }
+            }
+        }
+    }
+    post {
+        success {
+            script {
+                echo "Build succeeded! Build ID: ${BUILD_ID}"
+            }
+        }
+        failure {
+            script {
+                echo "Failed Pipeline: ${currentBuild.fullDisplayName}"
+            }
+        }
+    }
+}
