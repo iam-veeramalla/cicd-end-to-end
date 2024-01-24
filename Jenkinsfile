@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: '',
+                git credentialsId: 'bbc69362-59e8-44be-95c6-39f5109027cf',
                 url: 'https://github.com/livevil8/cicd-end-to-end',
                 branch: 'main'
             }
