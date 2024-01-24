@@ -16,12 +16,16 @@ pipeline {
         stage('Debug') {
             steps {
                 script {
+                    echo "Jenkins Home: ${env.JENKINS_HOME}"
+                    echo "Jenkins User: ${env.USER}"
+                    echo "Groups: ${sh(script: 'groups', returnStdout: true).trim()}"
                     sh 'docker --version'
                     sh 'docker info'
-                    sh 'docker run --rm hello-world'
+                    sh 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock hello-world'
                 }
             }
         }
+    }
         stage('Build Docker') {
             steps {
                 script {
