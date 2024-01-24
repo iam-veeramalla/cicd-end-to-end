@@ -13,6 +13,15 @@ pipeline {
                 branch: 'main'
             }
         }
+        stage('Debug') {
+            steps {
+                script {
+                    sh 'docker --version'
+                    sh 'docker info'
+                    sh 'docker run --rm hello-world'
+                }
+            }
+        }
         stage('Build Docker') {
             steps {
                 script {
