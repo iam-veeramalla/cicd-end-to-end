@@ -13,15 +13,20 @@ pipeline {
                 branch: 'main'
             }
         }
-        stage('Build and push dockerImage') {
+        stage('Build Docker') {
             steps {
                 script {
                     sh '''
                     echo 'Building Docker Image'
                     docker build -t livevil8/${DOCKER_IMAGE} .
-                    docker push livevil8/${DOCKER_IMAGE}
                     '''
                 }
+            }
+        }
+        stage('Push dockerImage') {
+            withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_CREDENTIALS', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+                    sh "docker push livevil8/${DOCKER_IMAGE}"
             }
         }
         stage ('Deploy Locally') {
