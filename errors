@@ -25,7 +25,7 @@ Client: Docker Engine - Community
   compose: Docker Compose (Docker Inc.)
     Version:  v2.21.0
     Path:     /usr/libexec/docker/cli-plugins/docker-compose
-curl -sO http://localhost:8080/jnlpJars/agent.jar;java -jar agent.jar -jnlpUrl http://localhost:8080/computer/aws/jenkins-agent.jnlp -secret 1387d5e4405639dcad4ab26a517277febc0cdf237729f2d8e9f91b814bbca1b6 -workDir "/var/jenkins"
+
 Server:
 ERROR: permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/info": dial unix /var/run/docker.sock: connect: permission denied
 errors pretty printing info
